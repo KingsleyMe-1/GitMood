@@ -18,6 +18,18 @@
 			"recommended": true
 		}
 	},
+	"css": {
+		"parser": {
+			"allowWrongLineComments": false,
+			"cssModules": false
+		},
+		"linter": {
+			"enabled": false
+		},
+		"formatter": {
+			"enabled": false
+		}
+	},
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double"
