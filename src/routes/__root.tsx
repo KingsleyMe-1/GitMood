@@ -119,7 +119,7 @@ function RootLayout() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<head>
 				<HeadContent />
 				{/* Prevents dark-mode flash before React hydrates */}
