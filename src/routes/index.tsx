@@ -1,7 +1,9 @@
+import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { EmojiPicker } from "../components/EmojiPicker";
 import { TagSelector } from "../components/TagSelector";
+import { saveEntry } from "../lib/entries";
 
 export const Route = createFileRoute("/")({ component: CheckInPage });
 
@@ -19,11 +21,16 @@ function CheckInPage() {
 
 	const isValid = emoji !== "" && note.trim() !== "" && tags.length > 0;
 
+	const mutation = useMutation({
+		mutationFn: (input: { emoji: string; note: string; tags: string[] }) =>
+			saveEntry({ data: input }),
+		onSuccess: () => setSubmitted(true),
+	});
+
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		if (!isValid) return;
-		// Server mutation wired on Day 5 — placeholder confirmation for now
-		setSubmitted(true);
+		if (!isValid || mutation.isPending) return;
+		mutation.mutate({ emoji, note, tags });
 	}
 
 	if (submitted) {
@@ -102,13 +109,20 @@ function CheckInPage() {
 				</section>
 
 				{/* Submit */}
-				<button
-					type="submit"
-					disabled={!isValid}
-					className="w-full rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-indigo-500 dark:hover:bg-indigo-400"
-				>
-					Commit your feelings →
-				</button>
+				<div className="space-y-2">
+					<button
+						type="submit"
+						disabled={!isValid || mutation.isPending}
+						className="w-full rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+					>
+						{mutation.isPending ? "Committing…" : "Commit your feelings →"}
+					</button>
+					{mutation.isError && (
+						<p className="text-sm text-red-500 dark:text-red-400" role="alert">
+							Something went wrong. Try again.
+						</p>
+					)}
+				</div>
 			</form>
 		</div>
 	);
