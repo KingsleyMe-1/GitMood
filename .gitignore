@@ -1,5 +1,6 @@
 node_modules
 .DS_Store
+gitmood.db
 dist
 dist-ssr
 *.local
