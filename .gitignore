@@ -10,5 +10,8 @@ dist-ssr
 .wrangler
 .output
 .vinxi
+.vercel
 __unconfig*
 todos.json
+.vscode
+.github

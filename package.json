@@ -16,6 +16,7 @@
     "check": "biome check ."
   },
   "dependencies": {
+    "@libsql/client": "^0.17.3",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-query": "^5.100.10",
