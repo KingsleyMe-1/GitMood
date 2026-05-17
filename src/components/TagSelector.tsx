@@ -14,34 +14,42 @@ const PRESET_TAGS = [
 ] as const;
 
 type Props = {
-	value: string;
-	onChange: (tag: string) => void;
+	value: string[];
+	onChange: (tags: string[]) => void;
 };
 
 export function TagSelector({ value, onChange }: Props) {
 	const [custom, setCustom] = useState("");
 
+	function toggleTag(tag: string) {
+		if (value.includes(tag)) {
+			onChange(value.filter((t) => t !== tag));
+		} else {
+			onChange([...value, tag]);
+		}
+	}
+
 	function submitCustom() {
 		const trimmed = custom.trim();
 		if (!trimmed) return;
 		const tag = trimmed.startsWith("#") ? trimmed : `#${trimmed}`;
-		onChange(tag);
+		toggleTag(tag);
 		setCustom("");
 	}
 
 	return (
 		<div className="space-y-3">
 			<fieldset className="border-0 m-0 p-0">
-				<legend className="sr-only">Select a tag</legend>
+				<legend className="sr-only">Select tags</legend>
 				<div className="flex flex-wrap gap-2">
 					{PRESET_TAGS.map((tag) => (
 						<button
 							key={tag}
 							type="button"
-							aria-pressed={value === tag}
-							onClick={() => onChange(tag)}
+							aria-pressed={value.includes(tag)}
+							onClick={() => toggleTag(tag)}
 							className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
-								value === tag
+								value.includes(tag)
 									? "bg-indigo-600 text-white dark:bg-indigo-500"
 									: "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
 							}`}
@@ -52,7 +60,7 @@ export function TagSelector({ value, onChange }: Props) {
 				</div>
 			</fieldset>
 
-			<div className="flex gap-2">
+			<div className="mt-4 flex gap-2">
 				<input
 					type="text"
 					value={custom}

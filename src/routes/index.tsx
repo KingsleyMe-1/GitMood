@@ -14,10 +14,10 @@ function CheckInPage() {
 
 	const [emoji, setEmoji] = useState("");
 	const [note, setNote] = useState("");
-	const [tag, setTag] = useState("");
+	const [tags, setTags] = useState<string[]>([]);
 	const [submitted, setSubmitted] = useState(false);
 
-	const isValid = emoji !== "" && note.trim() !== "" && tag !== "";
+	const isValid = emoji !== "" && note.trim() !== "" && tags.length > 0;
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -41,7 +41,7 @@ function CheckInPage() {
 					onClick={() => {
 						setEmoji("");
 						setNote("");
-						setTag("");
+						setTags([]);
 						setSubmitted(false);
 					}}
 					className="mt-2 text-sm text-indigo-600 hover:underline dark:text-indigo-400"
@@ -98,7 +98,7 @@ function CheckInPage() {
 					<p className="text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
 						Tag
 					</p>
-					<TagSelector value={tag} onChange={setTag} />
+					<TagSelector value={tags} onChange={setTags} />
 				</section>
 
 				{/* Submit */}
